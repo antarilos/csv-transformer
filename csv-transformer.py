@@ -7,9 +7,9 @@ def get_file_number_lines(filename):
         return sum(1 for line in file_data)
 
 
-def get_file_data(filename):
+def get_file_data(filename, delimiter):
     with open(filename) as csv_file:
-        file_data = csv.reader(csv_file)
+        file_data = csv.reader(csv_file, delimiter=delimiter)
 
         file_header = next(file_data)
 
@@ -17,7 +17,8 @@ def get_file_data(filename):
         for line in file_data:
             item = {}
             for idx, value in enumerate(line):
-                item[file_header[idx]] = value
+                if idx < len(file_header):
+                    item[file_header[idx]] = value
             data.append(item)
 
         return data
@@ -78,10 +79,12 @@ def get_conversion(filename):
 
 
 def main():
-    data = get_file_data("data.csv")
+    data = get_file_data("data.csv", ",")
     print(data)
 
     conversion = get_conversion("conversion.csv")
+    print(conversion)
+
     data_converted = data_convert(data, conversion)
     print(data_converted)
 
