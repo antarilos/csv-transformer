@@ -8,7 +8,7 @@ def get_file_number_lines(filename):
 
 
 def get_file_data(filename, delimiter):
-    with open(filename) as csv_file:
+    with open(filename, encoding="ISO-8859-1") as csv_file:
         file_data = csv.reader(csv_file, delimiter=delimiter)
 
         file_header = next(file_data)
@@ -64,7 +64,7 @@ def data_to_table(data):
 def write_file_data(filename, data):
     table = data_to_table(data)
 
-    with open(filename, "w") as csv_file:
+    with open(filename, "w", encoding="ISO-8859-1") as csv_file:
         file_writer = csv.writer(csv_file)
         for line in table:
             file_writer.writerow(line)
@@ -73,7 +73,7 @@ def write_file_data(filename, data):
 def get_conversion(filename):
     conversion = []
 
-    with open(filename) as csv_file:
+    with open(filename, encoding="ISO-8859-1") as csv_file:
         file_data = csv.reader(csv_file)
         for line in file_data:
             conversion.append(line)
