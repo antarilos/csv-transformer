@@ -32,7 +32,7 @@ def data_convert(data, conversion):
             if c[0] in item:
                 item_converted[c[1]] = item[c[0]]
             else:
-                print("column " + c[0] + " not found.")
+                item_converted[c[1]] = ""
 
         data_converted.append(item_converted)
 
@@ -66,11 +66,22 @@ def write_file_data(filename, data):
             file_writer.writerow(line)
 
 
+def get_conversion(filename):
+    conversion = []
+
+    with open(filename) as csv_file:
+        file_data = csv.reader(csv_file)
+        for line in file_data:
+            conversion.append(line)
+
+    return conversion
+
+
 def main():
     data = get_file_data("data.csv")
     print(data)
 
-    conversion = [("columna3", "col3"), ("columna1", "col1"), ("columna2", "col2")]
+    conversion = get_conversion("conversion.csv")
     data_converted = data_convert(data, conversion)
     print(data_converted)
 
