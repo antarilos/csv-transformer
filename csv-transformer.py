@@ -1,4 +1,5 @@
 import csv
+import argparse
 
 
 def get_file_number_lines(filename):
@@ -7,8 +8,8 @@ def get_file_number_lines(filename):
         return sum(1 for line in file_data)
 
 
-def get_file_data(filename, delimiter):
-    with open(filename, encoding="ISO-8859-1") as csv_file:
+def get_file_data(filename, delimiter, encoding):
+    with open(filename, encoding=encoding) as csv_file:
         file_data = csv.reader(csv_file, delimiter=delimiter)
 
         file_header = next(file_data)
@@ -61,19 +62,19 @@ def data_to_table(data):
     return table
 
 
-def write_file_data(filename, data):
+def write_file_data(filename, data, encoding):
     table = data_to_table(data)
 
-    with open(filename, "w", encoding="ISO-8859-1") as csv_file:
+    with open(filename, "w", encoding=encoding) as csv_file:
         file_writer = csv.writer(csv_file)
         for line in table:
             file_writer.writerow(line)
 
 
-def get_conversion(filename):
+def get_conversion(filename, encoding):
     conversion = []
 
-    with open(filename, encoding="ISO-8859-1") as csv_file:
+    with open(filename, encoding=encoding) as csv_file:
         file_data = csv.reader(csv_file)
         for line in file_data:
             conversion.append(line)
@@ -82,16 +83,32 @@ def get_conversion(filename):
 
 
 def main():
-    data = get_file_data("data.csv", ",")
+    parser = argparse.ArgumentParser(description="Converts CSV files.")
+    parser.add_argument('input',
+                        help="Input file name to be converted.")
+    parser.add_argument('output',
+                        help="Output file name to store the conversion.")
+    parser.add_argument('conversion',
+                        help="Input file name from where the conversion description is read.")
+    parser.add_argument('-d', '--delimiter',
+                        help="Delimiter character to be used to split the CSV columns (default \',\').",
+                        default=',')
+    parser.add_argument('-e', '--encoding',
+                        help="Files encoding (default ISO-8859-1).",
+                        default='ISO-8859-1')
+
+    args = parser.parse_args()
+
+    data = get_file_data(args.input, args.delimiter, args.encoding)
     print(data)
 
-    conversion = get_conversion("conversion.csv")
+    conversion = get_conversion(args.conversion, args.encoding)
     print(conversion)
 
     data_converted = data_convert(data, conversion)
     print(data_converted)
 
-    write_file_data("data_out.csv", data_converted)
+    write_file_data(args.output, data_converted, args.encoding)
 
 
 if __name__ == "__main__":
