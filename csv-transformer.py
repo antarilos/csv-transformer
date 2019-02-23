@@ -84,18 +84,18 @@ def get_conversion(filename, encoding):
 
 def main():
     parser = argparse.ArgumentParser(description="Converts CSV files.")
-    parser.add_argument('input',
+    parser.add_argument("input",
                         help="Input file name to be converted.")
-    parser.add_argument('output',
+    parser.add_argument("output",
                         help="Output file name to store the conversion.")
-    parser.add_argument('conversion',
+    parser.add_argument("conversion",
                         help="Input file name from where the conversion description is read.")
-    parser.add_argument('-d', '--delimiter',
-                        help="Delimiter character to be used to split the CSV columns (default \',\').",
-                        default=',')
-    parser.add_argument('-e', '--encoding',
+    parser.add_argument("-d", "--delimiter",
+                        help="Delimiter character to be used to split the CSV columns (default ',').",
+                        default=",")
+    parser.add_argument("-e", "--encoding",
                         help="Files encoding (default ISO-8859-1).",
-                        default='ISO-8859-1')
+                        default="ISO-8859-1")
 
     args = parser.parse_args()
 
