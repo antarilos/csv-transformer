@@ -39,6 +39,33 @@ def data_convert(data, conversion):
     return data_converted
 
 
+def data_to_table(data):
+    table = []
+
+    if len(data) == 0:
+        return table
+
+    header = data[0].keys()
+    table.append(header)
+
+    for item in data:
+        line = []
+        for h in header:
+            line.append(item[h])
+        table.append(line)
+
+    return table
+
+
+def write_file_data(filename, data):
+    table = data_to_table(data)
+
+    with open(filename, "w") as csv_file:
+        file_writer = csv.writer(csv_file)
+        for line in table:
+            file_writer.writerow(line)
+
+
 def main():
     data = get_file_data("data.csv")
     print(data)
@@ -46,6 +73,8 @@ def main():
     conversion = [("columna3", "col3"), ("columna1", "col1"), ("columna2", "col2")]
     data_converted = data_convert(data, conversion)
     print(data_converted)
+
+    write_file_data("data_out.csv", data_converted)
 
 
 if __name__ == "__main__":
