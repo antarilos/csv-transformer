@@ -18,7 +18,7 @@ def get_file_data(filename, delimiter):
             item = {}
             for idx, value in enumerate(line):
                 if idx < len(file_header):
-                    item[file_header[idx]] = value
+                    item[file_header[idx]] = value.strip()
             data.append(item)
 
         return data
