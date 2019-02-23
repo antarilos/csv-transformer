@@ -23,9 +23,29 @@ def get_file_data(filename):
         return data
 
 
+def data_convert(data, conversion):
+    data_converted = []
+
+    for item in data:
+        item_converted = {}
+        for c in conversion:
+            if c[0] in item:
+                item_converted[c[1]] = item[c[0]]
+            else:
+                print("column " + c[0] + " not found.")
+
+        data_converted.append(item_converted)
+
+    return data_converted
+
+
 def main():
     data = get_file_data("data.csv")
     print(data)
+
+    conversion = [("columna3", "col3"), ("columna1", "col1"), ("columna2", "col2")]
+    data_converted = data_convert(data, conversion)
+    print(data_converted)
 
 
 if __name__ == "__main__":
