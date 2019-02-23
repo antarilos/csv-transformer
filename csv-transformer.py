@@ -20,7 +20,7 @@ def get_file_data(filename):
                 item[file_header[idx]] = value
             data.append(item)
 
-        return(data)
+        return data
 
 
 if __name__ == "__main__":
