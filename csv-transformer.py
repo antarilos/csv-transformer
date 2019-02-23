@@ -8,8 +8,8 @@ def get_file_number_lines(filename):
 
 
 def get_file_data(filename):
-    with open(filename) as csvfile:
-        file_data = csv.reader(csvfile)
+    with open(filename) as csv_file:
+        file_data = csv.reader(csv_file)
 
         for line in file_data:
             print(line)
