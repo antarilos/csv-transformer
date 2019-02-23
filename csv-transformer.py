@@ -3,9 +3,9 @@ import csv
 
 def get_file_data(filename):
     with open(filename) as csvfile:
-        filedata = csv.reader(csvfile)
+        file_data = csv.reader(csvfile)
 
-        for line in filedata:
+        for line in file_data:
             print(line)
 
 
