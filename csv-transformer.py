@@ -31,7 +31,10 @@ def data_convert(data, conversion):
         item_converted = {}
         for c in conversion:
             if c[0] in item:
-                item_converted[c[1]] = item[c[0]]
+                if c[2] == "*":
+                    item_converted[c[1]] = item[c[0]].title()
+                else:
+                    item_converted[c[1]] = item[c[0]]
             else:
                 item_converted[c[1]] = c[2]
 
