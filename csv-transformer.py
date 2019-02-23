@@ -2,7 +2,7 @@ import csv
 import argparse
 
 
-class CsvTransformer():
+class CsvTransformer:
 
     def __init__(self, input_filename, output_filename, conversion_filename, input_delimiter, encoding):
         self.input_filename = input_filename
