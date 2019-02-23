@@ -11,12 +11,6 @@ class CsvTransformer():
         self.input_delimiter = input_delimiter
         self.encoding = encoding
 
-    @staticmethod
-    def get_file_number_lines(filename):
-        with open(filename) as csv_file:
-            file_data = csv.reader(csv_file)
-            return sum(1 for line in file_data)
-
     def get_file_data(self):
         with open(self.input_filename, encoding=self.encoding) as csv_file:
             file_data = csv.reader(csv_file, delimiter=self.input_delimiter)
