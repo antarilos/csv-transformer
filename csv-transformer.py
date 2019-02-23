@@ -2,84 +2,103 @@ import csv
 import argparse
 
 
-def get_file_number_lines(filename):
-    with open(filename) as csv_file:
-        file_data = csv.reader(csv_file)
-        return sum(1 for line in file_data)
+class CsvTransformer():
 
+    def __init__(self, input_filename, output_filename, conversion_filename, input_delimiter, encoding):
+        self.input_filename = input_filename
+        self.output_filename = output_filename
+        self.conversion_filename = conversion_filename
+        self.input_delimiter = input_delimiter
+        self.encoding = encoding
 
-def get_file_data(filename, delimiter, encoding):
-    with open(filename, encoding=encoding) as csv_file:
-        file_data = csv.reader(csv_file, delimiter=delimiter)
+    @staticmethod
+    def get_file_number_lines(filename):
+        with open(filename) as csv_file:
+            file_data = csv.reader(csv_file)
+            return sum(1 for line in file_data)
 
-        file_header = next(file_data)
+    def get_file_data(self):
+        with open(self.input_filename, encoding=self.encoding) as csv_file:
+            file_data = csv.reader(csv_file, delimiter=self.input_delimiter)
 
-        data = []
-        for line in file_data:
-            item = {}
-            for idx, value in enumerate(line):
-                if idx < len(file_header):
-                    item[file_header[idx]] = value.strip()
-            data.append(item)
+            file_header = next(file_data)
 
-        return data
+            data = []
+            for line in file_data:
+                item = {}
+                for idx, value in enumerate(line):
+                    if idx < len(file_header):
+                        item[file_header[idx]] = value.strip()
+                data.append(item)
 
+            return data
 
-def data_convert(data, conversion):
-    data_converted = []
+    @staticmethod
+    def data_convert(data, conversion):
+        data_converted = []
 
-    for item in data:
-        item_converted = {}
-        for c in conversion:
-            if c[0] in item:
-                if c[2] == "*":
-                    item_converted[c[1]] = item[c[0]].title()
+        for item in data:
+            item_converted = {}
+            for c in conversion:
+                if c[0] in item:
+                    if c[2] == "*":
+                        item_converted[c[1]] = item[c[0]].title()
+                    else:
+                        item_converted[c[1]] = item[c[0]]
                 else:
-                    item_converted[c[1]] = item[c[0]]
-            else:
-                item_converted[c[1]] = c[2]
+                    item_converted[c[1]] = c[2]
 
-        data_converted.append(item_converted)
+            data_converted.append(item_converted)
 
-    return data_converted
+        return data_converted
 
+    @staticmethod
+    def data_to_table(data):
+        table = []
 
-def data_to_table(data):
-    table = []
+        if len(data) == 0:
+            return table
 
-    if len(data) == 0:
+        header = data[0].keys()
+        table.append(header)
+
+        for item in data:
+            line = []
+            for h in header:
+                line.append(item[h])
+            table.append(line)
+
         return table
 
-    header = data[0].keys()
-    table.append(header)
+    def write_file_data(self, data):
+        table = self.data_to_table(data)
 
-    for item in data:
-        line = []
-        for h in header:
-            line.append(item[h])
-        table.append(line)
+        with open(self.output_filename, "w", encoding=self.encoding) as csv_file:
+            file_writer = csv.writer(csv_file)
+            for line in table:
+                file_writer.writerow(line)
 
-    return table
+    def get_conversion(self):
+        conversion = []
 
+        with open(self.conversion_filename, encoding=self.encoding) as csv_file:
+            file_data = csv.reader(csv_file)
+            for line in file_data:
+                conversion.append(line)
 
-def write_file_data(filename, data, encoding):
-    table = data_to_table(data)
+        return conversion
 
-    with open(filename, "w", encoding=encoding) as csv_file:
-        file_writer = csv.writer(csv_file)
-        for line in table:
-            file_writer.writerow(line)
+    def do(self):
+        data = self.get_file_data()
+        print(data)
 
+        conversion = self.get_conversion()
+        print(conversion)
 
-def get_conversion(filename, encoding):
-    conversion = []
+        data_converted = self.data_convert(data, conversion)
+        print(data_converted)
 
-    with open(filename, encoding=encoding) as csv_file:
-        file_data = csv.reader(csv_file)
-        for line in file_data:
-            conversion.append(line)
-
-    return conversion
+        self.write_file_data(data_converted)
 
 
 def main():
@@ -99,16 +118,8 @@ def main():
 
     args = parser.parse_args()
 
-    data = get_file_data(args.input, args.delimiter, args.encoding)
-    print(data)
-
-    conversion = get_conversion(args.conversion, args.encoding)
-    print(conversion)
-
-    data_converted = data_convert(data, conversion)
-    print(data_converted)
-
-    write_file_data(args.output, data_converted, args.encoding)
+    csv_transformer = CsvTransformer(args.input, args.output, args.conversion, args.delimiter, args.encoding)
+    csv_transformer.do()
 
 
 if __name__ == "__main__":
