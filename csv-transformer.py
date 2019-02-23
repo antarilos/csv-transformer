@@ -23,6 +23,10 @@ def get_file_data(filename):
         return data
 
 
-if __name__ == "__main__":
+def main():
     data = get_file_data("data.csv")
     print(data)
+
+
+if __name__ == "__main__":
+    main()
