@@ -33,7 +33,7 @@ def data_convert(data, conversion):
             if c[0] in item:
                 item_converted[c[1]] = item[c[0]]
             else:
-                item_converted[c[1]] = ""
+                item_converted[c[1]] = c[2]
 
         data_converted.append(item_converted)
 
